@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Web</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #111b21;
+            color: #e9edef;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 400px;
+            background-color: #202c33;
+            border-right: 1px solid #3b4a54;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background-color: #2a3942;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            border-bottom: 1px solid #3b4a54;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #54656f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: #aebac1;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+
+        .header-btn:hover {
+            background-color: #3b4a54;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.2s;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Search */
+        .search-container {
+            padding: 12px;
+            background-color: #202c33;
+            border-bottom: 1px solid #3b4a54;
+        }
+
+        .search-box {
+            background-color: #2a3942;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: #e9edef;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .search-box::placeholder {
+            color: #8696a0;
+        }
+
+        .search-box:focus {
+            outline: none;
+            background-color: #323739;
+        }
+
+        /* Chat List */
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+            background-color: #111b21;
+        }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #2a3942;
+            transition: background-color 0.2s;
+        }
+
+        .chat-item:hover {
+            background-color: #2a3942;
+        }
+
+        .chat-item.active {
+            background-color: #2a3942;
+        }
+
+        .chat-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #54656f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .chat-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2px;
+        }
+
+        .chat-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #e9edef;
+        }
+
+        .chat-time {
+            font-size: 12px;
+            color: #8696a0;
+        }
+
+        .chat-preview {
+            font-size: 14px;
+            color: #8696a0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .unread-badge {
+            background-color: #00a884;
+            color: white;
+            border-radius: 50%;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-icon {
+            font-size: 12px;
+            margin-right: 3px;
+        }
+
+        /* Main Chat Area */
+        .main-chat {
+            flex: 1;
+            background-color: #0b141a;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="0.5" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23pattern)"/></svg>');
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: #8696a0;
+            max-width: 400px;
+        }
+
+        .whatsapp-logo {
+            width: 320px;
+            height: 320px;
+            margin-bottom: 30px;
+            opacity: 0.1;
+            background-color: #54656f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+        }
+
+        .welcome-title {
+            font-size: 32px;
+            font-weight: 300;
+            margin-bottom: 20px;
+            color: #e9edef;
+        }
+
+        .welcome-subtitle {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #8696a0;
+        }
+
+        /* Custom Scrollbar */
+        .chat-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-list::-webkit-scrollbar-track {
+            background: #2a3942;
+        }
+
+        .chat-list::-webkit-scrollbar-thumb {
+            background: #54656f;
+            border-radius: 3px;
+        }
+
+        .chat-list::-webkit-scrollbar-thumb:hover {
+            background: #667781;
+        }
+
+        .group-icon {
+            color: #00a884;
+        }
+
+        .typing-indicator {
+            color: #00a884;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Header -->
+            <div class="header">
+                <div class="user-info">
+                    <div class="user-avatar">U</div>
+                    <span>User</span>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn">⚙</button>
+                    <button class="header-btn">💬</button>
+                    <button class="header-btn">⋮</button>
+                    <form action="logout.php" method="post" style="display: inline;">
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Search -->
+            <div class="search-container">
+                <input type="text" class="search-box" placeholder="Search or start a new chat">
+            </div>
+
+            <!-- Chat List -->
+            <div class="chat-list">
+                <div class="chat-item active">
+                    <div class="chat-avatar">O</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">Oswald and Co</div>
+                            <div class="chat-time">15/07/2025</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">✓</span>
+                            You: Tomorrow
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar group-icon">📊</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">POWER BI / TABLEAU For Data Analytics</div>
+                            <div class="chat-time">23:23</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">~</span>
+                            INVESTORMJ X-CHANGE was added
+                        </div>
+                    </div>
+                    <div class="unread-badge">1</div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">📊</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">EXCEL For Data Analytics</div>
+                            <div class="chat-time">23:23</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">~</span>
+                            INVESTORMJ X-CHANGE was added
+                        </div>
+                    </div>
+                    <div class="unread-badge">1</div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">D</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">Dad</div>
+                            <div class="chat-time">20:43</div>
+                        </div>
+                        <div class="chat-preview">
+                            Good evening Gabs is trying to send you koko but it's not going...
+                        </div>
+                    </div>
+                    <div class="unread-badge">1</div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">S</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">SQL For Data Analytics</div>
+                            <div class="chat-time">23:23</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">~</span>
+                            INVESTORMJ X-CHANGE was added
+                        </div>
+                    </div>
+                    <div class="unread-badge">1</div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">G</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">Mr Gabs</div>
+                            <div class="chat-time">19:56</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">✓</span>
+                            Sandra Dzorghasi
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">M</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">Main Active ⚡🔥</div>
+                            <div class="chat-time">19:10</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">✓</span>
+                            Okay. Slowww
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">A</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">ACTIZENS-Social Media</div>
+                            <div class="chat-time">18:43</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">~</span>
+                            Nil Mannah. CS As part of our community project, Acity Produ...
+                        </div>
+                    </div>
+                    <div class="unread-badge">1</div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">2</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">2025 Remote Internship - July Cohort</div>
+                            <div class="chat-time">17:41</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">~</span>
+                            Based: Yes please
+                        </div>
+                    </div>
+                    <div class="unread-badge">1</div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">D</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">DevHub Network</div>
+                            <div class="chat-time">17:29</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">~</span>
+                            NewPluto Exchange 💸: 👍 This message can't be displayed...
+                        </div>
+                    </div>
+                    <div class="unread-badge">1</div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">L</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">Learn Data Analytics 2</div>
+                            <div class="chat-time">23:23</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">~</span>
+                            INVESTORMJ X-CHANGE was added
+                        </div>
+                    </div>
+                    <div class="unread-badge">1</div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">N</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">New Number (You)</div>
+                            <div class="chat-time">15:35</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">✓</span>
+                            I hope this message finds you well. Please find attached the pr...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">Y</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">Yaw Dbee Boy🤣</div>
+                            <div class="chat-time">15:28</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">✓</span>
+                            https://meet.google.com/pwr-msxf-tos
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">S</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">StatQuestJourney Hub</div>
+                            <div class="chat-time">08:41</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">~</span>
+                            Matthew Sham: Data Analysis in 2025: It's More Than Just Dash...
+                        </div>
+                    </div>
+                    <div class="unread-badge">1</div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">B</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">Back End newbies</div>
+                            <div class="chat-time">08:00</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">~</span>
+                            Benedict♥️😊: Hi there, I'm Benedict, a software engineer. I c...
+                        </div>
+                    </div>
+                    <div class="unread-badge">1</div>
+                </div>
+
+                <div class="chat-item">
+                    <div class="chat-avatar">P</div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <div class="chat-name">PYTHON For Data Analytics</div>
+                            <div class="chat-time">23:24</div>
+                        </div>
+                        <div class="chat-preview">
+                            <span class="status-icon">~</span>
+                            INVESTORMJ X-CHANGE was added
+                        </div>
+                    </div>
+                    <div class="unread-badge">1</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="main-chat">
+            <div class="welcome-message">
+                <div class="whatsapp-logo">💬</div>
+                <h1 class="welcome-title">WhatsApp for Windows</h1>
+                <p class="welcome-subtitle">
+                    Send and receive messages without keeping your phone online.<br>
+                    Use WhatsApp on up to 4 linked devices and 1 phone at the same time.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add click functionality to chat items
+        document.querySelectorAll('.chat-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all items
+                document.querySelectorAll('.chat-item').forEach(i => i.classList.remove('active'));
+                // Add active class to clicked item
+                this.classList.add('active');
+            });
+        });
+
+        // Search functionality
+        document.querySelector('.search-box').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const chatItems = document.querySelectorAll('.chat-item');
+            
+            chatItems.forEach(item => {
+                const chatName = item.querySelector('.chat-name').textContent.toLowerCase();
+                const chatPreview = item.querySelector('.chat-preview').textContent.toLowerCase();
+                
+                if (chatName.includes(searchTerm) || chatPreview.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
