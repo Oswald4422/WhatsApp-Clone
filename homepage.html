@@ -22,6 +22,7 @@
         .container {
             display: flex;
             height: 100vh;
+            position: relative;
         }
 
         /* Sidebar */
@@ -31,6 +32,7 @@
             border-right: 1px solid #3b4a54;
             display: flex;
             flex-direction: column;
+            z-index: 10;
         }
 
         /* Header */
@@ -42,6 +44,7 @@
             align-items: center;
             height: 60px;
             border-bottom: 1px solid #3b4a54;
+            position: relative;
         }
 
         .user-info {
@@ -65,6 +68,7 @@
         .header-actions {
             display: flex;
             gap: 15px;
+            align-items: center;
         }
 
         .header-btn {
@@ -73,9 +77,10 @@
             color: #aebac1;
             cursor: pointer;
             font-size: 18px;
-            padding: 5px;
+            padding: 8px;
             border-radius: 3px;
             transition: background-color 0.2s;
+            position: relative;
         }
 
         .header-btn:hover {
@@ -95,6 +100,58 @@
 
         .logout-btn:hover {
             background-color: #c82333;
+        }
+
+        /* Settings Dropdown */
+        .settings-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #2a3942;
+            border: 1px solid #3b4a54;
+            border-radius: 8px;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+        }
+
+        .settings-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #e9edef;
+            font-size: 14px;
+        }
+
+        .dropdown-item:hover {
+            background-color: #3b4a54;
+        }
+
+        .dropdown-item:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .dropdown-item:last-child {
+            border-radius: 0 0 8px 8px;
+        }
+
+        .dropdown-separator {
+            height: 1px;
+            background-color: #3b4a54;
+            margin: 4px 0;
         }
 
         /* Search */
@@ -256,21 +313,220 @@
             color: #8696a0;
         }
 
+        /* Status Window */
+        .status-window {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-window.show {
+            display: flex;
+        }
+
+        .status-container {
+            background-color: #111b21;
+            width: 90%;
+            max-width: 800px;
+            height: 90%;
+            max-height: 600px;
+            border-radius: 12px;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .status-sidebar {
+            width: 320px;
+            background-color: #202c33;
+            border-right: 1px solid #3b4a54;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-header {
+            background-color: #2a3942;
+            padding: 16px;
+            border-bottom: 1px solid #3b4a54;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .close-status {
+            background: none;
+            border: none;
+            color: #aebac1;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 4px;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+
+        .close-status:hover {
+            background-color: #3b4a54;
+        }
+
+        .status-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: #e9edef;
+        }
+
+        .my-status {
+            padding: 16px;
+            border-bottom: 1px solid #3b4a54;
+        }
+
+        .my-status-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .add-status {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: #00a884;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .add-status:hover {
+            background-color: #008c6f;
+        }
+
+        .my-status-info h3 {
+            color: #e9edef;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .my-status-info p {
+            color: #8696a0;
+            font-size: 14px;
+        }
+
+        .status-list-header {
+            padding: 16px;
+            color: #8696a0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .status-item:hover {
+            background-color: #2a3942;
+        }
+
+        .status-item.active {
+            background-color: #2a3942;
+        }
+
+        .status-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+            background-color: #54656f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .status-ring {
+            position: absolute;
+            inset: -2px;
+            border: 2px solid #00a884;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #00a884 0deg, #00a884 120deg, transparent 120deg);
+        }
+
+        .status-item-info {
+            flex: 1;
+        }
+
+        .status-item-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #e9edef;
+            margin-bottom: 2px;
+        }
+
+        .status-item-time {
+            font-size: 12px;
+            color: #8696a0;
+        }
+
+        .status-viewer {
+            flex: 1;
+            background-color: #0b141a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .status-content {
+            text-align: center;
+            color: #8696a0;
+        }
+
+        .status-placeholder {
+            font-size: 120px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
         /* Custom Scrollbar */
-        .chat-list::-webkit-scrollbar {
+        .chat-list::-webkit-scrollbar,
+        .status-list::-webkit-scrollbar {
             width: 6px;
         }
 
-        .chat-list::-webkit-scrollbar-track {
+        .chat-list::-webkit-scrollbar-track,
+        .status-list::-webkit-scrollbar-track {
             background: #2a3942;
         }
 
-        .chat-list::-webkit-scrollbar-thumb {
+        .chat-list::-webkit-scrollbar-thumb,
+        .status-list::-webkit-scrollbar-thumb {
             background: #54656f;
             border-radius: 3px;
         }
 
-        .chat-list::-webkit-scrollbar-thumb:hover {
+        .chat-list::-webkit-scrollbar-thumb:hover,
+        .status-list::-webkit-scrollbar-thumb:hover {
             background: #667781;
         }
 
@@ -295,12 +551,47 @@
                     <span>User</span>
                 </div>
                 <div class="header-actions">
-                    <button class="header-btn">⚙</button>
+                    <button class="header-btn" id="settingsBtn">⚙</button>
+                    <button class="header-btn" id="statusBtn">📊</button>
                     <button class="header-btn">💬</button>
                     <button class="header-btn">⋮</button>
                     <form action="logout.php" method="post" style="display: inline;">
                         <button type="submit" class="logout-btn">Logout</button>
                     </form>
+                    
+                    <!-- Settings Dropdown -->
+                    <div class="settings-dropdown" id="settingsDropdown">
+                        <div class="dropdown-item">
+                            <span>👤</span>
+                            <span>Profile</span>
+                        </div>
+                        <div class="dropdown-item">
+                            <span>🔔</span>
+                            <span>Notifications</span>
+                        </div>
+                        <div class="dropdown-item">
+                            <span>🔒</span>
+                            <span>Privacy</span>
+                        </div>
+                        <div class="dropdown-item">
+                            <span>💬</span>
+                            <span>Chats</span>
+                        </div>
+                        <div class="dropdown-separator"></div>
+                        <div class="dropdown-item">
+                            <span>❓</span>
+                            <span>Help</span>
+                        </div>
+                        <div class="dropdown-item">
+                            <span>📋</span>
+                            <span>Keyboard shortcuts</span>
+                        </div>
+                        <div class="dropdown-separator"></div>
+                        <div class="dropdown-item">
+                            <span>🚪</span>
+                            <span>Log out</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -558,6 +849,96 @@
                 </p>
             </div>
         </div>
+
+        <!-- Status Window -->
+        <div class="status-window" id="statusWindow">
+            <div class="status-container">
+                <div class="status-sidebar">
+                    <div class="status-header">
+                        <button class="close-status" id="closeStatus">✕</button>
+                        <h2 class="status-title">Status</h2>
+                    </div>
+                    
+                    <div class="my-status">
+                        <div class="my-status-header">
+                            <div class="add-status">+</div>
+                            <div class="my-status-info">
+                                <h3>My status</h3>
+                                <p>Click to add status update</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="status-list-header">
+                        Recent updates
+                    </div>
+
+                    <div class="status-list">
+                        <div class="status-item">
+                            <div class="status-avatar">
+                                <div class="status-ring"></div>
+                                J
+                            </div>
+                            <div class="status-item-info">
+                                <div class="status-item-name">John Doe</div>
+                                <div class="status-item-time">2 hours ago</div>
+                            </div>
+                        </div>
+
+                        <div class="status-item">
+                            <div class="status-avatar">
+                                <div class="status-ring"></div>
+                                S
+                            </div>
+                            <div class="status-item-info">
+                                <div class="status-item-name">Sarah Wilson</div>
+                                <div class="status-item-time">4 hours ago</div>
+                            </div>
+                        </div>
+
+                        <div class="status-item">
+                            <div class="status-avatar">
+                                <div class="status-ring"></div>
+                                M
+                            </div>
+                            <div class="status-item-info">
+                                <div class="status-item-name">Mike Chen</div>
+                                <div class="status-item-time">6 hours ago</div>
+                            </div>
+                        </div>
+
+                        <div class="status-item">
+                            <div class="status-avatar">
+                                <div class="status-ring"></div>
+                                A
+                            </div>
+                            <div class="status-item-info">
+                                <div class="status-item-name">Anna Smith</div>
+                                <div class="status-item-time">1 day ago</div>
+                            </div>
+                        </div>
+
+                        <div class="status-item">
+                            <div class="status-avatar">
+                                <div class="status-ring"></div>
+                                D
+                            </div>
+                            <div class="status-item-info">
+                                <div class="status-item-name">David Brown</div>
+                                <div class="status-item-time">1 day ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-viewer">
+                    <div class="status-content">
+                        <div class="status-placeholder">📷</div>
+                        <h3>Click on a contact to view their status updates</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -586,6 +967,126 @@
                     item.style.display = 'none';
                 }
             });
+        });
+
+        // Settings dropdown functionality
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsDropdown = document.getElementById('settingsDropdown');
+
+        settingsBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            settingsDropdown.classList.toggle('show');
+        });
+
+        // Close settings dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!settingsBtn.contains(e.target) && !settingsDropdown.contains(e.target)) {
+                settingsDropdown.classList.remove('show');
+            }
+        });
+
+        // Status window functionality
+        const statusBtn = document.getElementById('statusBtn');
+        const statusWindow = document.getElementById('statusWindow');
+        const closeStatus = document.getElementById('closeStatus');
+
+        statusBtn.addEventListener('click', function() {
+            statusWindow.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeStatus.addEventListener('click', function() {
+            statusWindow.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close status window when clicking outside the container
+        statusWindow.addEventListener('click', function(e) {
+            if (e.target === statusWindow) {
+                statusWindow.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Status item click functionality
+        document.querySelectorAll('.status-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all status items
+                document.querySelectorAll('.status-item').forEach(i => i.classList.remove('active'));
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Update status viewer content
+                const name = this.querySelector('.status-item-name').textContent;
+                const time = this.querySelector('.status-item-time').textContent;
+                const statusViewer = document.querySelector('.status-viewer .status-content');
+                
+                statusViewer.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="width: 300px; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 48px;">
+                            📸
+                        </div>
+                        <h3 style="color: #e9edef; margin-bottom: 8px;">${name}</h3>
+                        <p style="color: #8696a0; font-size: 14px;">${time}</p>
+                        <div style="margin-top: 20px; display: flex; gap: 20px; justify-content: center;">
+                            <button style="background: #2a3942; border: none; color: #e9edef; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 14px;">Reply</button>
+                            <button style="background: #2a3942; border: none; color: #e9edef; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 14px;">Forward</button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+        // Add status functionality
+        document.querySelector('.add-status').addEventListener('click', function() {
+            alert('Add status functionality would be implemented here');
+        });
+
+        // Dropdown item click handlers
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const text = this.textContent.trim();
+                console.log('Settings option clicked:', text);
+                
+                // Close dropdown
+                settingsDropdown.classList.remove('show');
+                
+                // Handle different options
+                switch(text) {
+                    case 'Profile':
+                        alert('Profile settings would open here');
+                        break;
+                    case 'Notifications':
+                        alert('Notification settings would open here');
+                        break;
+                    case 'Privacy':
+                        alert('Privacy settings would open here');
+                        break;
+                    case 'Chats':
+                        alert('Chat settings would open here');
+                        break;
+                    case 'Help':
+                        alert('Help center would open here');
+                        break;
+                    case 'Keyboard shortcuts':
+                        alert('Keyboard shortcuts would be displayed here');
+                        break;
+                    case 'Log out':
+                        if (confirm('Are you sure you want to log out?')) {
+                            // Handle logout
+                            alert('Logout functionality would be implemented here');
+                        }
+                        break;
+                }
+            });
+        });
+
+        // Close status window with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && statusWindow.classList.contains('show')) {
+                statusWindow.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
         });
     </script>
 </body>
